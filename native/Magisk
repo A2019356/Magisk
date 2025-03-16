@@ -1,0 +1,19 @@
+https://github.com/topjohnwu/Magisk/pull/8845/files?diff=split&w=0#r1997654712int app_id = to_app_id(uid);
+if (app_id >= 90000) {
+    if (auto it = pkg_to_procs.find(ISOLATED_MAGIC); it != pkg_to_procs.end()) {
+        for (const auto &s : it->second) {
+            if (str_starts(process, s))
+                return true;
+        }
+    }
+    return false;
+} else {
+    auto it = app_id_to_pkgs.find(app_id);
+    if (it == app_id_to_pkgs.end())
+        return false;
+    for (const auto &pkg : it->second) {
+        if (pkg_to_procs.find(pkg)->second.count(process))
+            return true;
+    }
+}
+return false;
